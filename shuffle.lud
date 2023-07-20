@@ -1,0 +1,97 @@
+(define "SetHiddenEach"  
+   (set Hidden #1 to:P2)  (set Hidden #1 to:P3)  (set Hidden #1 to:P4)
+   (set Hidden #2 to:P1)  (set Hidden #2 to:P3)  (set Hidden #2 to:P4)
+   (set Hidden #3 to:P1)  (set Hidden #3 to:P2)  (set Hidden #3 to:P4)
+   (set Hidden #4 to:P1)  (set Hidden #4 to:P2)  (set Hidden #4 to:P3)              
+)
+
+//------------------------------------------------------------------------------
+
+(game "Shuffle"
+  (players 4)
+  (equipment {
+    (board (rectangle 1 16))
+    (piece "Square" Shared) (piece "Square1" Shared)
+    (piece "Square2" Shared) (piece "Square3" Shared)
+    (piece "Square4" Shared) (piece "Square5" Shared)
+    (piece "Square6" Shared) (piece "Square7" Shared)
+    (piece "Square8" Shared) (piece "Square9" Shared)
+    (piece "Square10" Shared) (piece "Square11" Shared)
+    (piece "Square12" Shared) (piece "Square13" Shared)
+    (piece "Square14" Shared) (piece "Square15" Shared)
+    (piece "Square16" Shared) (piece "Square17" Shared)
+    (piece "Square18" Shared) (piece "Square19" Shared)
+    (piece "Square20" Shared) (piece "Square21" Shared)
+    (piece "Square22" Shared) (piece "Square23" Shared)
+    (piece "Square24" Shared) (piece "Square25" Shared)
+    (piece "Square26" Shared) (piece "Square27" Shared)
+    (piece "Square28" Shared) (piece "Square29" Shared)
+    (piece "Square30" Shared) (piece "Square31" Shared)
+    (piece "Square32" Shared) (piece "Square33" Shared)
+    (piece "Square34" Shared) (piece "Square35" Shared)
+    (hand Each size:6)
+  })
+  (rules
+    (start {
+      (place Random (sites (union (array {1..5}) (array {10..39})))
+        {"Square1" "Square2" "Square3" "Square4" "Square5"
+        "Square6" "Square7" "Square8" "Square9" "Square10"
+        "Square11" "Square12" "Square13" "Square14" "Square15"
+        "Square16" "Square17" "Square18" "Square19" "Square20"
+        "Square21" "Square22" "Square23" "Square24" "Square25"
+        "Square26" "Square27" "Square28" "Square29" "Square30"
+        "Square31" "Square32" "Square33" "Square34" "Square35"})
+      (forEach Player (set Hidden (sites (union (array {1..5})
+        (array {10..15}))) to:Player))
+    })
+    (play (move Pass))
+    (end {(if ("HandEmpty" Next) (byScore))})
+  )
+)
+//------------------------------------------------------------------------------
+(metadata
+(graphics {
+    (piece Foreground "Square1"  image:"Z" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square2"  image:"1" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square3"  image:"2" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square4"  image:"3" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square5"  image:"4" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square6"  image:"5" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square7"  image:"6" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square8"  image:"7" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square9"  image:"8" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square10" image:"9" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square11" image:"A" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square12" image:"B" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square13" image:"C" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square14" image:"D" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square15" image:"E" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square16" image:"F" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square17" image:"G" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square18" image:"H" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square19" image:"I" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square20" image:"J" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square21" image:"K" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square22" image:"L" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square23" image:"M" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square24" image:"N" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square25" image:"O" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square26" image:"P" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square27" image:"Q" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square28" image:"R" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square29" image:"S" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square30" image:"T" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square31" image:"U" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+    (piece Foreground "Square32" image:"V" fillColour:(colour Hidden) edgeColour:(colour Black) scale:0.7)
+    (piece Foreground "Square33" image:"W" fillColour:(colour Hidden) edgeColour:(colour Red) scale:0.7)
+    (piece Foreground "Square34" image:"X" fillColour:(colour Hidden) edgeColour:(colour 185 185 0) scale:0.7)
+    (piece Foreground "Square35" image:"Y" fillColour:(colour Hidden) edgeColour:(colour Blue) scale:0.7)
+(show Edges Hidden)
+(show Symbol "Hexagon" (sites Board) fillColour:(colour
+185 130 85) edgeColour:(colour 225 182 130))
+(board Placement scale:5)
+(stackType None)
+(board Background image:"square.svg" fillColour:(colour
+185 130 85) edgeColour:(colour 185 130 85) scale:1.45)
+})
+)
