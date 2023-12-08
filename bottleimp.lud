@@ -1,29 +1,33 @@
 (define "Tally"
-   (if (= 1 (score P1)) 
-     (- (count Stack at:(mapEntry "Won" #1)) 15)
-     (count Stack at:(mapEntry "Won" #1)))
+   (if (= (var "Imp") (id #1)) 
+       (- (score #1) (var "ImpToll")) (score #1)
+  )
 )
 
 (define "TrickWin"
-  (and (if (= #2 1) (fromTo (from (mapEntry "Loc" #1)) (to 7) copy:True (then 
-              (add (piece "Square38") (to (mapEntry "Won" #1))  (then 
-              (set Var "ImpPrice" (what at:7 level:(topLevel at:7))))))))
+  (and {(if (= #2 1) (fromTo (from (mapEntry "Loc" #1)) (to 7) copy:True (then 
+              (set Var "ImpPrice" (what at:(mapEntry "Loc" #1))))))
   (forEach Player 
-    (fromTo 
-      (from (mapEntry "Loc" Player)) 
-      (to (mapEntry "Won" #1))) (then
-    (set NextPlayer (player (id #1)) (then
-    (if (= #2 1) 
-      (forEach Player 
-        (set Score Player 0) (then 
-        (set Score #1 1)))))))))
+    (addScore #1 (mapEntry "Worth" (what at:(mapEntry "Loc" Player))) (then 
+    (remove (mapEntry "Loc" Player) level:0 (then
+    (set NextPlayer (player (id #1)) (then 
+    (set Var "Imp" #3))))))))})
 )
+
 
 (define "BottleBool"
   (or (and (> (var "ImpPrice") (what at:#1)) 
                 (> (what at:#1) (what at:#2))) 
        (< (var "ImpPrice") (what at:#2)))
 )
+                
+(define "SetHiddenEach"  
+   (set Hidden What #1 to:P2)  (set Hidden What #1 to:P3)  (set Hidden What #1 to:P4)
+   (set Hidden What #2 to:P1)  (set Hidden What #2 to:P3)  (set Hidden  What #2 to:P4)
+   (set Hidden What #3 to:P1)  (set Hidden What #3 to:P2)  (set Hidden What #3 to:P4)
+   (set Hidden What #4 to:P1)  (set Hidden What #4 to:P2)  (set Hidden What #4 to:P3)              
+)
+
 
 //------------------------------------------------------------------------------
 
@@ -32,7 +36,7 @@
 // Start:
 //   Start card (19) at centre with bottle imp on top.
 //   Deal all cards.
-//   Each player discards a card face-down to be the imp�s trick.
+//   Each player discards a card face-down to be the imp?s trick.
 //   Each player gives 1 card to both neighbours face-down.
 // Trick:
 //  Must follow colour suit of lead player unless unable to.
@@ -44,7 +48,7 @@
 //  Winner of trick leads next trick.
 // End of hand:
 //  Score point value of cards won, except player with bottle imp 
-//   scores negative value of imp�s trick.
+//   scores negative value of imp?s trick.
 // End of game:
 //  Play to agreed number of points, e.g. 500.
 
@@ -112,12 +116,13 @@
     
         (start {
               (place "Square19" 7)
-              (place Stack "Square38" 7)
               (place Random (sites (union {(array {10..18}) (array {20..28}) (array {30..38}) (array {40..48})}))
                       { "Square1"  "Square2"  "Square3"  "Square4"  "Square5"  "Square6"  "Square7"  "Square8"  "Square9"  
                         "Square10" "Square11" "Square12" "Square13" "Square14" "Square15" "Square16" "Square17" "Square18" 
                         "Square20" "Square21" "Square22" "Square23" "Square24" "Square25" "Square26" "Square27" "Square28"
                         "Square29" "Square30" "Square31" "Square32" "Square33" "Square34" "Square35" "Square36" "Square37"  })
+                ("SetHiddenEach" (sites {10..18}) (sites {20..28}) (sites {30..38}) (sites {40..48}))
+
          }      )
         phases:{
 
@@ -129,8 +134,7 @@
               (to   (mapEntry "Loc" (mover)))
               (then 
                 (set Var "ActiveSuit" (mapEntry "Suit" (what at:(mapEntry "Loc" Mover))) (then  
-                (if (= (count Turns) 1) (set Var "ImpPrice" 19)))))
-                         ))
+                (set Hidden What at:(mapEntry "Loc" Mover) False to:All (then (if (= (count Turns) 1) (set Var "ImpPrice" 19)))))))))
        
           (nextPhase "Follow"))
         
@@ -157,18 +161,18 @@
              (priority {
                (move
             (from (sites Hand Mover))
-              (to (mapEntry "Loc" (mover)) if:(= (mapEntry "Suit" (what at:(from))) (var "ActiveSuit"))))
+              (to (mapEntry "Loc" (mover)) if:(= (mapEntry "Suit" (what at:(from))) (var "ActiveSuit"))) 
+              (then (set Hidden What at:(mapEntry "Loc" Mover) False to:All)))
              (move  
                  (from (sites Hand Mover))
-                 (to (mapEntry "Loc" (mover))) )}))        
+                 (to (mapEntry "Loc" (mover))) (then (set Hidden What at:(mapEntry "Loc" Mover) False to:All)))} ))         
           (nextPhase (= (% (count Moves) 5) 4) "Trick"))   
 
         (phase "Trick"
           (play
             (move Pass (then 
               (if (and { (> (what at:0) (var "ImpPrice"))  (> (what at:1) (var "ImpPrice"))
-                           (> (what at:3) (var "ImpPrice"))  (> (what at:4) (var "ImpPrice"))})
-                
+                             (> (what at:3) (var "ImpPrice"))  (> (what at:4) (var "ImpPrice"))})                
                 (if (and {(> (what at:0) (what at:1)) (> (what at:0) (what at:3)) (> (what at:0) (what at:4))})
                   ("TrickWin" P1 0)
                   (if (and (> (what at:1) (what at:3)) (> (what at:1) (what at:4)))
@@ -191,10 +195,8 @@
       
           (end {(if ("HandEmpty" Mover) 
                  (byScore {
-                   (score P1 ("Tally" P1))
-                   (score P2 ("Tally" P2))
-                   (score P3 ("Tally" P3))
-                   (score P4 ("Tally" P4))})
+                   (score P1 ("Tally" P1))  (score P2 ("Tally" P2))
+                   (score P3 ("Tally" P3))  (score P4 ("Tally" P4))})
           )})
           (nextPhase "Lead"))
           
@@ -323,3 +325,14 @@
         "Bottle_Imp_ai"
     )
 )
+
+
+
+
+
+
+
+
+
+
+
